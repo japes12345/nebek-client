@@ -3,44 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeVPN - Decentralized VPN Network</title>
+    <title>NEBEK - Vanish at Will</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4F46E5;
-            --primary-dark: #4338CA;
-            --secondary: #10B981;
-            --dark: #1F2937;
-            --light: #F9FAFB;
-            --gray: #6B7280;
-            --gray-light: #E5E7EB;
+            --primary: #0F1C3F; /* Night blue */
+            --primary-dark: #07122A;
+            --accent: #D4AF37; /* Gold */
+            --accent-dark: #A38829;
+            --text: #E5E7EB;
+            --text-secondary: #9CA3AF;
+            --bg-dark: #030917;
+            --surface: #111827;
+            --surface-light: #1F2937;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Rajdhani', sans-serif;
+            scroll-behavior: smooth;
         }
         
         body {
-            background-color: var(--light);
-            color: var(--dark);
+            background-color: var(--bg-dark);
+            color: var(--text);
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         header {
-            background-color: var(--primary);
-            color: white;
+            background-color: rgba(7, 18, 42, 0.8);
+            backdrop-filter: blur(10px);
+            color: var(--text);
             padding: 1rem 0;
-            position: sticky;
+            position: fixed;
+            width: 100%;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         }
         
         .container {
             width: 90%;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
         
@@ -51,282 +60,576 @@
         }
         
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 2rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
+            color: var(--accent);
+            letter-spacing: 2px;
         }
         
         .logo-icon {
-            margin-right: 0.5rem;
-            font-size: 2rem;
+            margin-right: 0.75rem;
+            font-size: 2.25rem;
         }
         
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 2.5rem;
         }
         
         .nav-links a {
-            color: white;
+            color: var(--text);
             text-decoration: none;
             font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
         }
         
         .cta-button {
-            background-color: var(--secondary);
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 9999px;
+            background-color: var(--accent);
+            color: var(--bg-dark);
+            padding: 0.6rem 1.8rem;
+            border: none;
+            border-radius: 4px;
             font-weight: 600;
+            letter-spacing: 1px;
             transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+            text-transform: uppercase;
         }
         
         .cta-button:hover {
-            background-color: #0EA271;
-            transform: translateY(-1px);
+            background-color: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
         }
         
         .hero {
-            padding: 6rem 0;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: radial-gradient(circle at 30% 30%, var(--primary), var(--bg-dark));
+            position: relative;
+            overflow: hidden;
+            padding: 8rem 0 5rem;
+        }
+        
+        .hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23D4AF37" opacity="0.3"/></svg>');
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .eye-symbol {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            transform: translateY(-50%);
+            width: 35%;
+            max-width: 500px;
+            opacity: 0.2;
+            filter: blur(2px);
+            animation: pulse 5s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% {
+                opacity: 0.15;
+                filter: blur(2px);
+            }
+            100% {
+                opacity: 0.25;
+                filter: blur(1px);
+            }
         }
         
         .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(to right, var(--text) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .tagline {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+            font-weight: 500;
+            letter-spacing: 2px;
         }
         
         .hero p {
             font-size: 1.25rem;
-            max-width: 800px;
-            margin: 0 auto 2rem auto;
-            opacity: 0.9;
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+            color: var(--text-secondary);
         }
         
         .hero-buttons {
             display: flex;
-            gap: 1rem;
-            justify-content: center;
+            gap: 1.5rem;
         }
         
-        .hero-cta {
-            background-color: white;
-            color: var(--primary);
-            padding: 0.75rem 2rem;
-            border-radius: 9999px;
+        .button-secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 0.55rem 1.75rem;
+            border-radius: 4px;
             font-weight: 600;
-            text-decoration: none;
+            letter-spacing: 1px;
             transition: all 0.3s ease;
-        }
-        
-        .hero-cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .hero-secondary {
-            background-color: transparent;
-            color: white;
-            border: 2px solid white;
-            padding: 0.75rem 2rem;
-            border-radius: 9999px;
-            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
             text-decoration: none;
-            transition: all 0.3s ease;
         }
         
-        .hero-secondary:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            transform: translateY(-3px);
+        .button-secondary:hover {
+            background-color: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.1);
         }
         
-        .features {
-            padding: 5rem 0;
+        .section {
+            padding: 8rem 0;
+            position: relative;
         }
         
         .section-title {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
         }
         
         .section-title h2 {
-            font-size: 2.25rem;
-            color: var(--dark);
-            margin-bottom: 1rem;
+            font-size: 3rem;
+            color: var(--accent);
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
         }
         
         .section-title p {
-            color: var(--gray);
+            color: var(--text-secondary);
             max-width: 700px;
             margin: 0 auto;
+            font-size: 1.2rem;
+        }
+        
+        .features {
+            background: var(--bg-dark);
+            position: relative;
         }
         
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 2.5rem;
         }
         
         .feature-card {
-            background-color: white;
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+            background-color: var(--surface);
+            border-radius: 8px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 0;
+            background-color: var(--accent);
+            transition: height 0.4s ease;
         }
         
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px);
+            background-color: var(--surface-light);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card:hover:before {
+            height: 100%;
         }
         
         .feature-icon {
-            display: inline-block;
-            width: 3rem;
-            height: 3rem;
-            line-height: 3rem;
-            text-align: center;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 0.5rem;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+            margin-bottom: 1.75rem;
+            font-size: 2.5rem;
+            color: var(--accent);
         }
         
         .feature-card h3 {
             margin-bottom: 1rem;
-            font-size: 1.25rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
         }
         
         .feature-card p {
-            color: var(--gray);
+            color: var(--text-secondary);
+            font-size: 1.1rem;
         }
         
-        .how-it-works {
-            padding: 5rem 0;
-            background-color: var(--gray-light);
+        .setup {
+            background-color: var(--primary-dark);
+            position: relative;
+        }
+        
+        .setup:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(15, 28, 63, 0.9) 0%, rgba(3, 9, 23, 0.9) 100%);
+            z-index: 1;
+        }
+        
+        .setup .container {
+            position: relative;
+            z-index: 2;
         }
         
         .steps {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
             margin-top: 3rem;
         }
         
-        .step {
-            display: flex;
-            gap: 2rem;
-            align-items: flex-start;
+        .step-card {
+            background-color: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 2.5rem;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .step-card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
         
         .step-number {
-            flex-shrink: 0;
-            width: 3rem;
-            height: 3rem;
-            line-height: 3rem;
+            display: inline-block;
+            width: 2.5rem;
+            height: 2.5rem;
+            line-height: 2.5rem;
             text-align: center;
+            background-color: var(--accent);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            color: var(--accent);
+        }
+        
+        .step-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+        }
+        
+        .code-block {
+            background-color: var(--bg-dark);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            color: var(--text);
+            overflow-x: auto;
+        }
+        
+        .hardware {
+            background-color: var(--bg-dark);
+        }
+        
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .specs-card {
+            background-color: var(--surface);
+            border-radius: 8px;
+            padding: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .specs-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .specs-card h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 0.75rem;
+        }
+        
+        .specs-card ul {
+            list-style-type: none;
+        }
+        
+        .specs-card li {
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .specs-card li:before {
+            content: '→';
+            color: var(--accent);
+            margin-right: 0.75rem;
+        }
+        
+        .rewards {
             background-color: var(--primary);
-            color: white;
-            border-radius: 9999px;
-            font-weight: bold;
-            font-size: 1.25rem;
+            position: relative;
+            overflow: hidden;
         }
         
-        .step-content h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.25rem;
+        .rewards:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 70%, rgba(212, 175, 55, 0.1) 0%, transparent 60%);
+            pointer-events: none;
         }
         
-        .step-content p {
-            color: var(--gray);
-        }
-        
-        .tokenomics {
-            padding: 5rem 0;
-        }
-        
-        .token-info {
+        .rewards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        .rewards-card {
+            background-color: rgba(17, 24, 39, 0.7);
+            border-radius: 8px;
+            padding: 2.5rem;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .rewards-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .rewards-icon {
+            color: var(--accent);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .rewards-card h3 {
+            color: var(--text);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        
+        .rewards-card p {
+            color: var(--text-secondary);
+        }
+        
+        .support {
+            background-color: var(--bg-dark);
+            position: relative;
+        }
+        
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
         }
         
-        .token-card {
-            background-color: white;
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        .support-card {
+            text-align: center;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
         }
         
-        .token-card h3 {
-            display: flex;
-            align-items: center;
+        .support-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .support-icon {
+            font-size: 2.5rem;
             margin-bottom: 1rem;
-            font-size: 1.25rem;
+            color: var(--accent);
+            transition: all 0.3s ease;
         }
         
-        .token-icon {
-            margin-right: 0.5rem;
-            color: var(--primary);
+        .support-card:hover .support-icon {
+            transform: scale(1.1);
         }
         
-        .roadmap {
-            padding: 5rem 0;
-            background-color: var(--gray-light);
+        .support-card h3 {
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            font-size: 1.3rem;
         }
         
-        .roadmap-timeline {
-            display: flex;
-            flex-direction: column;
-            gap: 3rem;
-            margin-top: 3rem;
+        .support-card a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
         
-        .timeline-item {
-            background-color: white;
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        
-        .timeline-item h3 {
-            margin-bottom: 1rem;
-            color: var(--primary);
-            font-size: 1.25rem;
-        }
-        
-        .timeline-item ul {
-            padding-left: 1.5rem;
-        }
-        
-        .timeline-item li {
-            margin-bottom: 0.5rem;
-            color: var(--gray);
+        .support-card a:hover {
+            text-decoration: underline;
         }
         
         footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 3rem 0 1.5rem;
+            background-color: var(--primary-dark);
+            padding: 5rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer:before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to top, var(--bg-dark), transparent);
+            pointer-events: none;
         }
         
         .footer-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
         }
         
-        .footer-section h3 {
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        
+        .footer-tagline {
+            color: var(--text-secondary);
             margin-bottom: 1.5rem;
-            font-size: 1.25rem;
+            font-style: italic;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(212, 175, 55, 0.1);
+            color: var(--accent);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--accent);
+            color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+        
+        .footer-title {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
         
         .footer-links {
@@ -338,57 +641,109 @@
         }
         
         .footer-links a {
-            color: #D1D5DB;
+            color: var(--text-secondary);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 1rem;
+        }
+        
+        .footer-links a:before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            transition: transform 0.3s ease;
         }
         
         .footer-links a:hover {
-            color: white;
+            color: var(--text);
         }
         
-        .social-icons {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .social-icon {
-            width: 2.5rem;
-            height: 2.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-        
-        .social-icon:hover {
-            background-color: var(--primary);
-            transform: translateY(-3px);
+        .footer-links a:hover:before {
+            transform: translateX(3px);
         }
         
         .copyright {
             text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 1.5rem;
-            color: #9CA3AF;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            color: var(--text-secondary);
             font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .hero h1 {
+                font-size: 4rem;
+            }
+            
+            .tagline {
+                font-size: 1.75rem;
+            }
+            
+            .eye-symbol {
+                width: 30%;
+                right: 5%;
+            }
         }
         
         @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1.5rem;
+            }
+            
             .hero-buttons {
                 flex-direction: column;
-                align-items: center;
+                align-items: flex-start;
             }
             
-            .step {
-                flex-direction: column;
+            .eye-symbol {
+                opacity: 0.1;
             }
             
-            .step-number {
-                margin-bottom: 1rem;
+            .section-title h2 {
+                font-size: 2.5rem;
             }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate {
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+        
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+        
+        .delay-3 {
+            animation-delay: 0.6s;
         }
     </style>
 </head>
@@ -397,36 +752,43 @@
         <div class="container">
             <nav>
                 <div class="logo">
-                    <span class="logo-icon">🔒</span>
-                    DeVPN
+                    <span class="logo-icon">🛡️</span>
+                    NEBEK
                 </div>
                 <div class="nav-links">
                     <a href="#features">Features</a>
-                    <a href="#how-it-works">How It Works</a>
-                    <a href="#tokenomics">Tokenomics</a>
-                    <a href="#roadmap">Roadmap</a>
+                    <a href="#setup">Setup</a>
+                    <a href="#hardware">Hardware</a>
+                    <a href="#rewards">Rewards</a>
+                    <a href="#support">Support</a>
                 </div>
-                <a href="#" class="cta-button">Get Started</a>
+                <a href="#setup" class="cta-button">Get Started</a>
             </nav>
         </div>
     </header>
     
     <section class="hero">
         <div class="container">
-            <h1>Decentralized VPN<br>Powered by Blockchain</h1>
-            <p>DeVPN is a revolutionary decentralized virtual private network that leverages blockchain technology to provide secure, private, and censorship-resistant internet access.</p>
-            <div class="hero-buttons">
-                <a href="#" class="hero-cta">Download DeVPN</a>
-                <a href="#" class="hero-secondary">Become a Node</a>
+            <div class="hero-content">
+                <h1 class="animate">NEBEK</h1>
+                <div class="tagline animate delay-1">Vanish at Will</div>
+                <p class="animate delay-2">Welcome to NEBEK, a decentralized virtual private network service. Earn rewards by providing VPN services while contributing to a network that provides secure, private, and censorship-resistant internet access.</p>
+                <div class="hero-buttons animate delay-3">
+                    <a href="#setup" class="cta-button">Become a Node</a>
+                    <a href="#rewards" class="button-secondary">Earn Rewards</a>
+                </div>
             </div>
         </div>
+        <svg class="eye-symbol" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 70">
+            <path fill="#D4AF37" d="M50,0C22.4,0,0,25,0,35s22.4,35,50,35s50-25,50-35S77.6,0,50,0z M50,60c-16.5,0-30-11.2-30-25 s13.5-25,30-25s30,11.2,30,25S66.5,60,50,60z M50,20c-8.3,0-15,6.7-15,15s6.7,15,15,15s15-6.7,15-15S58.3,20,50,20z"/>
+        </svg>
     </section>
     
-    <section class="features" id="features">
+    <section class="section features" id="features">
         <div class="container">
             <div class="section-title">
-                <h2>Why Choose DeVPN?</h2>
-                <p>Our decentralized approach offers benefits that traditional VPN services can't match.</p>
+                <h2>Why Choose NEBEK</h2>
+                <p>Our decentralized approach offers benefits traditional VPN services can't match</p>
             </div>
             
             <div class="features-grid">
@@ -451,7 +813,7 @@
                 <div class="feature-card">
                     <div class="feature-icon">💰</div>
                     <h3>Token Incentives</h3>
-                    <p>Earn DVPN tokens by contributing your bandwidth to the network as a node operator, creating a sustainable ecosystem.</p>
+                    <p>Earn NEBEK tokens by contributing your bandwidth to the network as a node operator, creating a sustainable ecosystem.</p>
                 </div>
                 
                 <div class="feature-card">
@@ -462,144 +824,221 @@
                 
                 <div class="feature-card">
                     <div class="feature-icon">🔄</div>
-                    <h3>Cross-Platform</h3>
-                    <p>Available on Windows, macOS, Linux, iOS, and Android. Secure all your devices with a single DeVPN account.</p>
+                    <h3>Silent Protection</h3>
+                    <p>Move through the digital shadows with our minimal interface design and protective Egyptian-inspired security architecture.</p>
                 </div>
             </div>
         </div>
     </section>
     
-    <section class="how-it-works" id="how-it-works">
+    <section class="section setup" id="setup">
         <div class="container">
             <div class="section-title">
-                <h2>How DeVPN Works</h2>
-                <p>Our decentralized architecture ensures privacy, security, and performance.</p>
+                <h2>Become a Node</h2>
+                <p>Follow these steps to set up your own NEBEK node and start earning rewards</p>
             </div>
             
             <div class="steps">
-                <div class="step">
+                <div class="step-card">
                     <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Connect to DeVPN</h3>
-                        <p>Download the DeVPN application, create an account, and connect with a single click. You can pay for the service using DVPN tokens or traditional payment methods.</p>
-                    </div>
+                    <h3>Prepare Your Hardware</h3>
+                    <p>Get your Raspberry Pi ready to join the NEBEK network:</p>
+                    <ul>
+                        <li>Download Raspberry Pi OS Lite (64-bit)</li>
+                        <li>Flash the OS to your MicroSD card</li>
+                        <li>Create an 'ssh' file in the boot partition</li>
+                        <li>Insert the card and power on</li>
+                    </ul>
                 </div>
                 
-                <div class="step">
+                <div class="step-card">
                     <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Smart Node Selection</h3>
-                        <p>Our algorithm automatically selects the optimal nodes from our decentralized network based on your location, desired server location, and current network conditions.</p>
-                    </div>
+                    <h3>Basic Configuration</h3>
+                    <p>Connect to your Raspberry Pi via SSH:</p>
+                    <div class="code-block">ssh pi@raspberrypi.local</div>
+                    <p>Update your system:</p>
+                    <div class="code-block">sudo apt update && sudo apt upgrade -y</div>
+                    <p>Install required packages:</p>
+                    <div class="code-block">sudo apt install -y wireguard wireguard-tools curl jq</div>
                 </div>
                 
-                <div class="step">
+                <div class="step-card">
                     <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Multi-Hop Routing</h3>
-                        <p>Your traffic is routed through multiple nodes in our network, each only knowing the previous and next hop, making it impossible to track your online activity.</p>
-                    </div>
+                    <h3>Install NEBEK Node</h3>
+                    <p>Install the node software with one command:</p>
+                    <div class="code-block">curl -sSL https://get.nebek.network | bash</div>
+                    <p>Or clone from GitHub and build manually:</p>
+                    <div class="code-block">git clone https://github.com/nebek/node-client
+cd node-client
+cargo build --release
+sudo cp target/release/nebek-node /usr/local/bin/</div>
                 </div>
                 
-                <div class="step">
+                <div class="step-card">
                     <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3>Blockchain Verification</h3>
-                        <p>Transactions between users and node operators are verified on the blockchain, ensuring transparency and fair compensation for bandwidth providers.</p>
-                    </div>
+                    <h3>Generate Your Keys</h3>
+                    <p>Create your node identity and secure keys:</p>
+                    <div class="code-block">nebek-node keygen</div>
+                    <p>Create a configuration file at /etc/nebek/config.json:</p>
+                    <div class="code-block">{
+  "node_id": "YOUR_NODE_ID",
+  "private_key": "YOUR_PRIVATE_KEY",
+  "public_key": "YOUR_PUBLIC_KEY",
+  "blockchain_endpoint": "https://blockchain.nebek.network",
+  "bootstrap_nodes": ["bootstrap1.nebek.network", "bootstrap2.nebek.network"],
+  "wireguard_interface": "wg0",
+  "max_clients": 20,
+  "ip_rotation_enabled": true
+}</div>
                 </div>
             </div>
         </div>
     </section>
     
-    <section class="tokenomics" id="tokenomics">
+    <section class="section hardware" id="hardware">
         <div class="container">
             <div class="section-title">
-                <h2>DVPN Tokenomics</h2>
-                <p>Our token economy is designed to create a sustainable ecosystem that benefits both users and node operators.</p>
+                <h2>Hardware Requirements</h2>
+                <p>Run a NEBEK node with minimal hardware requirements</p>
             </div>
             
-            <div class="token-info">
-                <div class="token-card">
-                    <h3><span class="token-icon">🔄</span> Token Utility</h3>
+            <div class="specs-grid">
+                <div class="specs-card">
+                    <h3>Recommended Hardware</h3>
                     <ul>
-                        <li>Pay for VPN services</li>
-                        <li>Stake to run a node</li>
-                        <li>Governance voting rights</li>
-                        <li>Premium features access</li>
+                        <li>Raspberry Pi 4 (2GB RAM or better)</li>
+                        <li>MicroSD card (16GB+)</li>
+                        <li>Power supply</li>
+                        <li>Ethernet connection (recommended)</li>
+                        <li>Optional: Case with cooling fan</li>
                     </ul>
                 </div>
                 
-                <div class="token-card">
-                    <h3><span class="token-icon">📊</span> Token Distribution</h3>
+                <div class="specs-card">
+                    <h3>Network Requirements</h3>
                     <ul>
-                        <li>40% - Node rewards</li>
-                        <li>25% - Development fund</li>
-                        <li>15% - Initial investors</li>
-                        <li>10% - Team allocation</li>
-                        <li>10% - Community incentives</li>
+                        <li>Stable internet connection</li>
+                        <li>Minimum 10 Mbps upload speed</li>
+                        <li>Minimum 20 Mbps download speed</li>
+                        <li>Open UDP port 51820</li>
+                        <li>Dynamic IP or ability to rotate IP</li>
                     </ul>
                 </div>
                 
-                <div class="token-card">
-                    <h3><span class="token-icon">💸</span> Node Incentives</h3>
+                <div class="specs-card">
+                    <h3>Advanced Setup</h3>
                     <ul>
-                        <li>Earn DVPN tokens for sharing bandwidth</li>
-                        <li>Rewards based on bandwidth provided</li>
-                        <li>Bonus for high uptime and performance</li>
-                        <li>Staking rewards for node operators</li>
+                        <li>Enable IP forwarding</li>
+                        <li>Setup as a systemd service</li>
+                        <li>Configure IP rotation methods</li>
+                        <li>Multiple interface support</li>
+                        <li>Performance monitoring tools</li>
+                    </ul>
+                </div>
+                
+                <div class="specs-card">
+                    <h3>Security Considerations</h3>
+                    <ul>
+                        <li>Use a dedicated Raspberry Pi</li>
+                        <li>Consider using a separate network</li>
+                        <li>Keep node software updated</li>
+                        <li>Never share your private keys</li>
+                        <li>Regularly check for suspicious activities</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
     
-    <section class="roadmap" id="roadmap">
+    <section class="section rewards" id="rewards">
         <div class="container">
             <div class="section-title">
-                <h2>DeVPN Roadmap</h2>
-                <p>Our development plan for making DeVPN the leading decentralized VPN service.</p>
+                <h2>Earning Rewards</h2>
+                <p>Contribute to the network and earn NEBEK tokens</p>
             </div>
             
-            <div class="roadmap-timeline">
-                <div class="timeline-item">
-                    <h3>Q2 2025 - Launch & Foundation</h3>
-                    <ul>
-                        <li>Initial token sale</li>
-                        <li>Alpha version of DeVPN client for Windows and macOS</li>
-                        <li>First network of beta nodes established</li>
-                        <li>Core protocol documentation</li>
-                    </ul>
+            <div class="rewards-grid">
+                <div class="rewards-card">
+                    <div class="rewards-icon">⏱️</div>
+                    <h3>Connection Time</h3>
+                    <p>Earn tokens based on the active connection time your node provides to users. Longer uptime means more rewards.</p>
                 </div>
                 
-                <div class="timeline-item">
-                    <h3>Q3 2025 - Expansion Phase</h3>
-                    <ul>
-                        <li>Mobile clients for iOS and Android</li>
-                        <li>Linux client release</li>
-                        <li>Open node network to public operators</li>
-                        <li>Governance system implementation</li>
-                    </ul>
+                <div class="rewards-card">
+                    <div class="rewards-icon">📶</div>
+                    <h3>Bandwidth Contribution</h3>
+                    <p>Nodes with higher bandwidth capacity and throughput earn more rewards, incentivizing quality connections.</p>
                 </div>
                 
-                <div class="timeline-item">
-                    <h3>Q4 2025 - Enhancement Phase</h3>
-                    <ul>
-                        <li>Advanced multi-hop routing optimization</li>
-                        <li>Browser extensions for Chrome and Firefox</li>
-                        <li>Enterprise solutions</li>
-                        <li>Performance optimizations</li>
-                    </ul>
+                <div class="rewards-card">
+                    <div class="rewards-icon">🌎</div>
+                    <h3>Geographic Location</h3>
+                    <p>Nodes in rare or high-demand locations earn bonus rewards, ensuring global coverage for the network.</p>
                 </div>
                 
-                <div class="timeline-item">
-                    <h3>2026 - Ecosystem Growth</h3>
-                    <ul>
-                        <li>Integration with other decentralized services</li>
-                        <li>Developer API and SDK</li>
-                        <li>Enhanced staking mechanisms</li>
-                        <li>Hardware node devices</li>
-                    </ul>
+                <div class="rewards-card">
+                    <div class="rewards-icon">🔄</div>
+                    <h3>IP Rotation</h3>
+                    <p>Regular IP rotation increases privacy and prevents blocking, earning additional rewards for maintaining anonymity.</p>
+                </div>
+                
+                <div class="rewards-card">
+                    <div class="rewards-icon">⭐</div>
+                    <h3>Client Ratings</h3>
+                    <p>Users rate their connection experience, with highly-rated nodes receiving performance bonuses.</p>
+                </div>
+                
+                <div class="rewards-card">
+                    <div class="rewards-icon">💎</div>
+                    <h3>Daily Payouts</h3>
+                    <p>Rewards are calculated daily and paid automatically to your connected wallet, with no minimum threshold.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section support" id="support">
+        <div class="container">
+            <div class="section-title">
+                <h2>Community Support</h2>
+                <p>Join our community and get help with your NEBEK node</p>
+            </div>
+            
+            <div class="support-grid">
+                <div class="support-card">
+                    <div class="support-icon">💬</div>
+                    <h3>Discord</h3>
+                    <a href="https://discord.gg/nebek" target="_blank">Join our Discord</a>
+                </div>
+                
+                <div class="support-card">
+                    <div class="support-icon">📱</div>
+                    <h3>Telegram</h3>
+                    <a href="https://t.me/nebek_network" target="_blank">Join our Telegram</a>
+                </div>
+                
+                <div class="support-card">
+                    <div class="support-icon">📋</div>
+                    <h3>Forum</h3>
+                    <a href="https://forum.nebek.network" target="_blank">Visit our Forum</a>
+                </div>
+                
+                <div class="support-card">
+                    <div class="support-icon">🐙</div>
+                    <h3>GitHub</h3>
+                    <a href="https://github.com/nebek/node-client" target="_blank">Report Issues</a>
+                </div>
+                
+                <div class="support-card">
+                    <div class="support-icon">📚</div>
+                    <h3>Documentation</h3>
+                    <a href="https://docs.nebek.network" target="_blank">Read the Docs</a>
+                </div>
+                
+                <div class="support-card">
+                    <div class="support-icon">🎓</div>
+                    <h3>Tutorials</h3>
+                    <a href="https://learn.nebek.network" target="_blank">Learn More</a>
                 </div>
             </div>
         </div>
@@ -608,52 +1047,76 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
-                    <h3>DeVPN</h3>
-                    <p>A decentralized VPN service powered by blockchain technology, providing secure and private internet access.</p>
-                    <div class="social-icons">
+                <div>
+                    <div class="footer-logo">NEBEK</div>
+                    <div class="footer-tagline">Vanish at Will</div>
+                    <p>A decentralized VPN service providing silent protection through the digital shadows.</p>
+                    <div class="social-links">
                         <a href="#" class="social-icon">X</a>
-                        <a href="#" class="social-icon">in</a>
-                        <a href="#" class="social-icon">tg</a>
-                        <a href="#" class="social-icon">gh</a>
+                        <a href="#" class="social-icon">D</a>
+                        <a href="#" class="social-icon">T</a>
+                        <a href="#" class="social-icon">G</a>
                     </div>
                 </div>
                 
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
+                <div>
+                    <div class="footer-title">Navigation</div>
                     <ul class="footer-links">
                         <li><a href="#features">Features</a></li>
-                        <li><a href="#how-it-works">How It Works</a></li>
-                        <li><a href="#tokenomics">Tokenomics</a></li>
-                        <li><a href="#roadmap">Roadmap</a></li>
+                        <li><a href="#setup">Setup Guide</a></li>
+                        <li><a href="#hardware">Hardware Requirements</a></li>
+                        <li><a href="#rewards">Earning Rewards</a></li>
+                        <li><a href="#support">Community Support</a></li>
                     </ul>
                 </div>
                 
-                <div class="footer-section">
-                    <h3>Resources</h3>
+                <div>
+                    <div class="footer-title">Resources</div>
                     <ul class="footer-links">
                         <li><a href="#">Documentation</a></li>
+                        <li><a href="#">GitHub Repository</a></li>
                         <li><a href="#">Whitepaper</a></li>
-                        <li><a href="#">API Reference</a></li>
-                        <li><a href="#">Node Setup Guide</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Troubleshooting</a></li>
                     </ul>
                 </div>
                 
-                <div class="footer-section">
-                    <h3>Legal</h3>
+                <div>
+                    <div class="footer-title">Legal</div>
                     <ul class="footer-links">
                         <li><a href="#">Terms of Service</a></li>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Cookie Policy</a></li>
-                        <li><a href="#">Compliance</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                        <li><a href="#">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
             
             <div class="copyright">
-                <p>&copy; 2025 DeVPN. All rights reserved.</p>
+                <p>&copy; 2025 NEBEK. All rights reserved. Silent protection through the digital shadows.</p>
             </div>
         </div>
     </footer>
+    
+    <script>
+        // Simple animation for elements when they come into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            document.querySelectorAll('.feature-card, .step-card, .specs-card, .rewards-card, .support-card, .section-title').forEach(el => {
+                observer.observe(el);
+                el.classList.remove('animate');
+            });
+        });
+    </script>
 </body>
 </html>
